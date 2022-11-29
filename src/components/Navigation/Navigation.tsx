@@ -18,7 +18,7 @@ const Navigation = () => {
             component="div"
             sx={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
           >
-            Projeto Final Banco de Dados ll - Willy
+            Projeto Final Banco de Dados ll API - Willy
           </Typography>
         </Toolbar>
       </Container>

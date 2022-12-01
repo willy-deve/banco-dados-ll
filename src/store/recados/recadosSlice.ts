@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-param-reassign */
 import {
   createAsyncThunk,
   createEntityAdapter,
@@ -49,7 +51,7 @@ export const excluirRecado = createAsyncThunk(
   }
 )
 
-const adapter = createEntityAdapter({
+const adapter = createEntityAdapter<Recado>({
   selectId: (item) => item.id,
 })
 
@@ -59,13 +61,52 @@ export const { selectAll, selectById } = adapter.getSelectors(
 
 const recadosSlice = createSlice({
   name: 'recados',
-  initialState: adapter.getInitialState(),
-  reducers: {
-    addOne: adapter.addOne,
-    addMany: adapter.addMany,
-    updateOne: adapter.updateOne,
+  initialState: adapter.getInitialState({
+    loading: false,
+  }),
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(buscarRecados.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(buscarRecados.fulfilled, (state, action) => {
+      state.loading = false
+      adapter.setAll(state, action.payload)
+    })
+
+    builder.addCase(criarRecado.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(criarRecado.fulfilled, (state, action) => {
+      state.loading = false
+      adapter.addOne(state, action.payload)
+    })
+
+    builder.addCase(atualizarRecado.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(atualizarRecado.fulfilled, (state, action) => {
+      state.loading = false
+      if (action.payload.id === 0) {
+        return state
+      }
+      adapter.updateOne(state, {
+        id: action.payload.id,
+        changes: action.payload,
+      })
+    })
+
+    builder.addCase(excluirRecado.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(excluirRecado.fulfilled, (state, action) => {
+      state.loading = false
+      if (action.payload.message === 'Recado não excluido.') {
+        return state
+      }
+      adapter.removeOne(state, action.payload.id)
+    })
   },
 })
 
-export const { addOne, addMany, updateOne } = sliceNameSlice.actions
-export default sliceNameSlice.reducer
+export default recadosSlice.reducer

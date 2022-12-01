@@ -1,5 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit'
+import { recado, recados } from '../recados/index'
 
-const combineReducer = combineReducers({})
+const combinedReducer = combineReducers({
+  recados,
+  recado,
+})
 
-export default combineReducer
+export default combinedReducer

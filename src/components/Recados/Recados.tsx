@@ -10,8 +10,13 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { Box } from '@mui/material'
+import { Recado } from '../../types/types'
+import { useAppDispatch, useAppSelector } from '../../store/modules/hooks'
+import { selectAll } from '../../store/recados/recadosSlice'
 
-export default function Recados() {
+const Recados: React.FC<Recado> = ({ id, description, detail }) => {
+  const dispatch = useAppDispatch();
+  const listaRecados = useAppSelector(selectAll)
   return (
     <Box
       sx={{
@@ -88,3 +93,5 @@ export default function Recados() {
     </Box>
   )
 }
+
+export default Recados
